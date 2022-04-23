@@ -150,7 +150,7 @@ int menorDiff(int *moedas, int tam)
     // Preenchimento do vetor na forma de matriz, pois para cada valor
     // 'i' teremos novas somas totais que podem ser atingidas ao somar as
     //  'i's primeiras moedas.
-    for (i = 0; i <= tam; i++)
+    for (i = 0; i < tam; i++)
     {
         // Colocando no vetor auxiliar as novas somas que pode ser atingida com,
         // a 'i'ésima moeda nova.
