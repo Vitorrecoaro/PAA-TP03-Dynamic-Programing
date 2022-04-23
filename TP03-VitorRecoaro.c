@@ -116,7 +116,7 @@ A função se baseará em um vetor será formado da seguinte forma:
 int menorDiff(int *moedas, int tam)
 {
     int menorDiff;
-    long int somaTotal = 0;
+    long int somaTotal = 0, metadeSomaTotal;
     int i, j;
 
     // Para facilitar o algoritmo será feita a ordenação das moedas.
@@ -125,10 +125,19 @@ int menorDiff(int *moedas, int tam)
     for (i = 0; i < tam; i++)
         somaTotal += moedas[i];
 
-    int vetorDecisao[(somaTotal / 2) + 1], aux[(somaTotal / 2) + 1];
+    metadeSomaTotal = (int)(somaTotal / 2) + 1;
+    int *vetorDecisao, *aux;
+
+    vetorDecisao = malloc(metadeSomaTotal * sizeof(int));
+
+    aux = malloc(metadeSomaTotal * sizeof(int));
+
+    // Se a alocação de memória não foi feita com sucesso retorna -1.
+    if (vetorDecisao == NULL || aux == NULL)
+        return -1;
 
     // Inicializando os vetores
-    for (i = 0; i < (somaTotal / 2) + 1; i++)
+    for (i = 0; i < metadeSomaTotal; i++)
     {
         aux[i] = 0;
         vetorDecisao[i] = 0;
@@ -145,7 +154,7 @@ int menorDiff(int *moedas, int tam)
     {
         // Colocando no vetor auxiliar as novas somas que pode ser atingida com,
         // a 'i'ésima moeda nova.
-        for (j = 0; j + moedas[i] < (somaTotal / 2) + 1; j++)
+        for (j = 0; j + moedas[i] < metadeSomaTotal; j++)
         {
             // Se o vetor decisão possui um subconjunto das 'i's primeiras moedas
             // que chega no valor 'j', então o valor 'j + moeda[i]' também pode ser alcançado.
@@ -153,7 +162,7 @@ int menorDiff(int *moedas, int tam)
                 aux[j + moedas[i]] = 1;
         }
         // Atualizando o vetor principal e resetando o vetor auxiliar.
-        for (j = 0; j < (somaTotal / 2) + 1; j++)
+        for (j = 0; j < metadeSomaTotal; j++)
         {
             if (aux[j])
                 vetorDecisao[j] = 1;
