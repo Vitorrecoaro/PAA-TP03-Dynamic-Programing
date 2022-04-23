@@ -26,6 +26,11 @@ e a menor diferença entre a quantidade de ouro para cada um deles após distrib
 #include <stdio.h>
 #include <stdlib.h>
 
+// Funções para ordenação.
+void mergeSort(int *, int, int);
+
+void intercala(int *, int, int, int);
+
 int menorDiff(int *, int);
 
 int main()
@@ -57,6 +62,49 @@ int main()
     fclose(arq);
 }
 
+// Funções de ordenação.
+void mergeSort(int *v, int inic, int fim)
+{
+    int meio = (fim + inic) / 2;
+    if (inic < fim - 1)
+    {
+        mergeSort(v, inic, meio);
+        mergeSort(v, meio, fim);
+        intercala(v, inic, meio, fim);
+    }
+}
+
+void intercala(int *v, int inic, int meio, int fim)
+{
+    // Vetor para auxiliar a ordenação.
+    int *w = (int *)malloc((fim - inic) * sizeof(int));
+
+    // "i" varrerá do início até o meio, e "j" do meio até o fim, aux será o auxiliar
+    // para ajeitar os valores no vetor "w".
+    int i = inic, j = meio, aux = 0;
+
+    while (i < meio && j < fim)
+    {
+        if (v[i] > v[j])
+            w[aux++] = v[i++];
+        else
+            w[aux++] = v[j++];
+    }
+
+    // Se o "j" já atingiu o fim, mas o "i" não varreu todo o seu espaço, percorra copiando.
+    while (i < meio)
+        w[aux++] = v[i++];
+
+    // Se o "i" já atingiu o fim, mas o "j" não varreu todo o seu espaço, percorra copiando.
+    while (j < fim)
+        w[aux++] = v[j++];
+
+    // Muda o vetor original, baseado no vetor auxiliar.
+    for (aux = 0; aux < (fim - inic); aux++)
+        v[inic + aux] = w[aux];
+    free(w);
+}
+
 /*
 A função se baseará em um vetor será formado da seguinte forma:
 
@@ -70,6 +118,9 @@ int menorDiff(int *moedas, int tam)
     int menorDiff;
     long int somaTotal = 0;
     int i, j;
+
+    // Para facilitar o algoritmo será feita a ordenação das moedas.
+    mergeSort(moedas, 0, tam);
 
     for (i = 0; i < tam; i++)
         somaTotal += moedas[i];
